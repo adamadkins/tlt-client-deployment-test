@@ -66,8 +66,8 @@ jobs:
                   'sha256': hashlib.sha256(data).hexdigest(),
                   'base64': base64.b64encode(data).decode('ascii')
               })
-              if len(entries) > 80:
-                  sys.exit('Static release exceeds 80 assets')
+              if len(entries) > 250:
+                  sys.exit('Static release exceeds 250 assets')
           if not entries or not any(x['path']=='index.html' for x in entries):
               sys.exit('index.html is required at build output root')
           # Require source build to stamp the exact commit into a served marker.
