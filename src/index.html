@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f6f0e7">
+  <meta name="description" content="A fictional handmade mitten shop created to test The Little Things Studios' client-owned Cloudflare publishing process.">
+  <meta name="studio-build" content="__COMMIT_SHA__">
+  <title>Thread & Thistle — Little things, warm hands</title>
+  <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="test-banner" role="status"><span class="test-dot" aria-hidden="true"></span> DEMONSTRATION SITE <span class="test-banner-separator">·</span> No real purchases or payments</div>
+  <header class="site-header">
+    <div class="header-inner shell">
+      <a class="wordmark" href="#home" aria-label="Thread and Thistle, home"><img src="./assets/mark.svg" width="38" height="38" alt=""/><span>thread <em>&</em> thistle</span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#collection">The collection</a><a href="#story">Our story</a><a href="#faq">Questions</a>
+      </nav>
+      <button type="button" class="cart-trigger" id="open-cart" aria-haspopup="dialog" aria-controls="cart-dialog" aria-label="Open demo cart, 0 items">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 8h14l1 12H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+        <span>Bag</span><span class="cart-count" id="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-content shell">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> MADE SLOWLY, LOVED FOREVER</div>
+          <h1 id="hero-title">Little things.<br><em>Warm hands.</em></h1>
+          <p>Thoughtfully stitched mittens for frosty mornings, long walks, and all the moments worth holding onto.</p>
+          <div class="hero-actions"><a class="button button-dark" href="#collection">Shop the collection <span aria-hidden="true">↗</span></a><a class="text-link" href="#story">A little about us <span aria-hidden="true">→</span></a></div>
+          <div class="hero-note"><span class="starburst" aria-hidden="true">✳</span><span>Made by hand, one cozy pair at a time.</span></div>
+        </div>
+        <div class="hero-visual" aria-label="Illustration of a pair of pink knitted mittens">
+          <div class="hero-visual-ring ring-one"></div><div class="hero-visual-ring ring-two"></div>
+          <div class="hero-spark hero-spark-top" aria-hidden="true">✳</div><div class="hero-spark hero-spark-bottom" aria-hidden="true">✳</div>
+          <img src="./assets/mitten-rose.svg" width="520" height="580" alt="Rosy pink knitted mittens with snowflake motifs" fetchpriority="high">
+          <div class="hero-stamp" aria-hidden="true"><span>STITCHED</span><svg viewBox="0 0 40 40"><path d="M20 3v34M3 20h34M7 7l26 26M33 7 7 33"/></svg><span>WITH CARE</span></div>
+        </div>
+      </div>
+    </section>
+    <div class="promise-strip" aria-label="Shop values"><div class="shell promise-items"><span>✳ &nbsp; HANDMADE WITH HEART</span><span>✧ &nbsp; SOFT, COZY & TIMELESS</span><span>✳ &nbsp; MADE FOR THE LITTLE MOMENTS</span></div></div>
+    <section class="collection section-pad" id="collection" aria-labelledby="collection-title">
+      <div class="shell">
+        <div class="section-title-row"><div><div class="eyebrow subdued">YOUR NEW COLD-WEATHER FAVORITES</div><h2 id="collection-title">A little something <em>cozy.</em></h2></div><p>Each pair is made with a bit of yarn, a lot of love, and nowhere to rush to.</p></div>
+        <div class="product-grid">
+          <article class="product-card" data-id="rose" data-name="Rosy Day Mittens" data-price="32" data-img="./assets/mitten-rose.svg"><div class="product-media product-rose"><span class="product-tag">BEST LOVED</span><img src="./assets/mitten-rose.svg" alt="Rosy Day Mittens in dusty rose" width="520" height="580" loading="lazy"></div><div class="product-meta"><div><h3>Rosy Day Mittens</h3><p>Dusty rose · Snowflake stitch</p></div><span class="price">$32</span></div><div class="product-actions"><label><span class="sr-only">Size for Rosy Day Mittens</span><select aria-label="Size for Rosy Day Mittens"><option value="S/M">S/M</option><option value="L/XL">L/XL</option></select></label><button type="button" class="add-button">Add to bag <span aria-hidden="true">↗</span></button></div></article>
+          <article class="product-card" data-id="oat" data-name="Sunday Morning Mittens" data-price="34" data-img="./assets/mitten-oat.svg"><div class="product-media product-oat"><span class="product-tag">CLASSIC COZY</span><img src="./assets/mitten-oat.svg" alt="Sunday Morning Mittens in oatmeal cable knit" width="520" height="580" loading="lazy"></div><div class="product-meta"><div><h3>Sunday Morning Mittens</h3><p>Oatmeal · Cable knit</p></div><span class="price">$34</span></div><div class="product-actions"><label><span class="sr-only">Size for Sunday Morning Mittens</span><select aria-label="Size for Sunday Morning Mittens"><option value="S/M">S/M</option><option value="L/XL">L/XL</option></select></label><button type="button" class="add-button">Add to bag <span aria-hidden="true">↗</span></button></div></article>
+          <article class="product-card" data-id="pine" data-name="Pine Trail Mittens" data-price="36" data-img="./assets/mitten-pine.svg"><div class="product-media product-pine"><span class="product-tag">TRAIL READY</span><img src="./assets/mitten-pine.svg" alt="Pine Trail Mittens in forest green" width="520" height="580" loading="lazy"></div><div class="product-meta"><div><h3>Pine Trail Mittens</h3><p>Forest green · Woodland motif</p></div><span class="price">$36</span></div><div class="product-actions"><label><span class="sr-only">Size for Pine Trail Mittens</span><select aria-label="Size for Pine Trail Mittens"><option value="S/M">S/M</option><option value="L/XL">L/XL</option></select></label><button type="button" class="add-button">Add to bag <span aria-hidden="true">↗</span></button></div></article>
+        </div>
+        <p class="collection-note"><span aria-hidden="true">✳</span> A demo collection for testing. Products, prices, and inventory are fictional.</p>
+      </div>
+    </section>
+    <section class="story" id="story" aria-labelledby="story-title"><div class="shell story-grid"><div class="story-art"><div class="story-art-inner"><div class="story-art-symbol" aria-hidden="true">✳</div><div class="story-art-circle"><img src="./assets/mitten-oat.svg" alt="Cream cable knit mittens" width="520" height="580" loading="lazy"></div><span class="story-art-caption">slow made / well loved</span></div></div><div class="story-copy"><div class="eyebrow subdued">HELLO FROM OUR LITTLE CORNER</div><h2 id="story-title">A little warmth goes <em>a long way.</em></h2><p>Some things are better when they take a little longer. Like a handwritten note, a cup of tea, and the last few stitches of a pair of mittens.</p><p>Thread & Thistle is a fictional small-shop concept, made to show how personal a beautiful storefront can feel—without making its owner wrestle with hosting or technology.</p><span class="signature">from our hands to yours <span aria-hidden="true">♡</span></span></div></div></section>
+    <section class="faq section-pad" id="faq" aria-labelledby="faq-title"><div class="shell faq-grid"><div><div class="eyebrow subdued">A FEW GOOD THINGS TO KNOW</div><h2 id="faq-title">Curious? <em>Us too.</em></h2><p>Here are a few quick answers about this example storefront.</p></div><div class="faq-list"><details><summary>Can I place an order here?<span aria-hidden="true">+</span></summary><p>No. This is a demonstration site. Its bag works for testing the interface, but checkout and payment collection are intentionally disabled.</p></details><details><summary>Are these mittens available for purchase?<span aria-hidden="true">+</span></summary><p>Not from this example shop. The products, prices, and inventory are fictional.</p></details><details><summary>What's this website testing?<span aria-hidden="true">+</span></summary><p>The Little Things Studios is testing how to build a website under the studio account, get client approval, and publish to a Cloudflare Worker owned by the client.</p></details></div></div></section>
+    <div class="outro"><div class="shell outro-inner"><span aria-hidden="true">✳</span><p>Made with care. Made for the little things.</p><a href="#home">Back to top ↑</a></div></div>
+  </main>
+  <footer class="site-footer"><div class="shell footer-inner"><a class="wordmark footer-wordmark" href="#home"><img src="./assets/mark.svg" width="34" height="34" alt=""/><span>thread <em>&</em> thistle</span></a><div><p>Fictional storefront for a deployment test.</p><p>Built by The Little Things Studios · Build <code id="build-sha">__COMMIT_SHA__</code></p></div></div></footer>
+  <div class="dialog-backdrop" id="cart-backdrop" hidden></div>
+  <section class="cart-dialog" id="cart-dialog" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true" hidden>
+    <div class="cart-head"><div><span class="eyebrow subdued">YOUR COZY PICKS</span><h2 id="cart-title">Your bag <em>♡</em></h2></div><button type="button" class="icon-button" id="close-cart" aria-label="Close bag">×</button></div>
+    <div class="cart-list" id="cart-list"></div>
+    <div class="cart-bottom"><div class="cart-total"><span>Subtotal</span><strong id="cart-subtotal">$0.00</strong></div><p class="demo-payment-note">Demo only. No orders or payments will be processed.</p><button type="button" class="button button-dark checkout-disabled" disabled aria-disabled="true">Checkout unavailable in demo</button></div>
+  </section>
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

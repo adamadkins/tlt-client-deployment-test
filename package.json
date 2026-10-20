@@ -1,0 +1,13 @@
+{
+  "name": "tlt-client-deployment-test",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Fictional demo storefront for testing client-owned Cloudflare Worker deployments",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test scripts/test.mjs",
+    "check": "npm run build && npm test"
+  },
+  "engines": { "node": ">=20.11" }
+}

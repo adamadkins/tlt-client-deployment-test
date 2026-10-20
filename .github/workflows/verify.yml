@@ -1,0 +1,24 @@
+name: Verify demo website
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Build and verify demo site
+        run: npm run check
+      - name: Upload verified release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-static-site
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
