@@ -1,0 +1,12 @@
+name: TLT production artifact
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  release:
+    uses: adamadkins/Client-Portal/.github/workflows/build-static-site.yml@main
+    with:
+      output_directory: dist
