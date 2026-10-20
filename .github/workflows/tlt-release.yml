@@ -3,10 +3,102 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+
 permissions:
   contents: read
+
 jobs:
-  release:
-    uses: adamadkins/Client-Portal/.github/workflows/build-static-site.yml@main
-    with:
-      output_directory: dist
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install exact dependencies if a lockfile exists
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            node - <<'NODE'
+            const p = require('./package.json')
+            if (Object.keys(p.dependencies || {}).length ||
+                Object.keys(p.devDependencies || {}).length ||
+                Object.keys(p.optionalDependencies || {}).length)
+              throw Error('Static release builds with dependencies require committed package-lock.json')
+            NODE
+          fi
+      - name: Build static website
+        run: npm run build
+        env:
+          SITE_COMMIT_SHA: ${{ github.sha }}
+      - name: Package exact output into a bounded verifiable artifact
+        shell: bash
+        env:
+          TLT_OUTPUT_DIR: dist
+          TLT_REPOSITORY: ${{ github.repository }}
+          TLT_COMMIT: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, os, pathlib, sys
+          folder = os.environ['TLT_OUTPUT_DIR']
+          if not folder or folder.startswith('/') or '\\' in folder or '..' in folder.split('/'):
+              sys.exit('Unsafe output directory')
+          root = pathlib.Path.cwd().resolve()
+          dist = (root / folder).resolve()
+          if not dist.is_relative_to(root) or not dist.is_dir():
+              sys.exit('Build output directory missing or outside checkout')
+          entries = []
+          total = 0
+          for file in sorted(dist.rglob('*')):
+              if file.is_symlink():
+                  sys.exit('Symlink in build output is prohibited')
+              if not file.is_file():
+                  continue
+              rel = file.relative_to(dist).as_posix()
+              if len(rel) > 220 or rel.startswith('.') or '/../' in '/' + rel or '\\' in rel:
+                  sys.exit('Unsupported static asset path')
+              data = file.read_bytes()
+              total += len(data)
+              if len(data) > 2*1024*1024 or total > 7*1024*1024:
+                  sys.exit('Static release exceeds bounded artifact size')
+              entries.append({
+                  'path': rel,
+                  'size': len(data),
+                  'sha256': hashlib.sha256(data).hexdigest(),
+                  'base64': base64.b64encode(data).decode('ascii')
+              })
+              if len(entries) > 80:
+                  sys.exit('Static release exceeds 80 assets')
+          if not entries or not any(x['path']=='index.html' for x in entries):
+              sys.exit('index.html is required at build output root')
+          # Require source build to stamp the exact commit into a served marker.
+          marker = next((x for x in entries if x['path']=='version.json'),None)
+          if not marker:
+              sys.exit('version.json is required to verify the deployed commit')
+          version = json.loads(base64.b64decode(marker['base64']))
+          if version.get('commit') != os.environ['TLT_COMMIT']:
+              sys.exit('version.json does not match the checked-out Git commit')
+          release = {
+              'format':'tlt-static-v1',
+              'repository':os.environ['TLT_REPOSITORY'],
+              'commit':os.environ['TLT_COMMIT'],
+              'files':entries
+          }
+          output = pathlib.Path('.tlt-release')
+          output.mkdir(exist_ok=True)
+          (output / 'tlt-release.json').write_text(json.dumps(release,separators=(',',':'))+'\n')
+          print('Packaged',len(entries),'assets for',release['commit'])
+          PY
+      - name: Upload immutable commit-named artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tlt-static-${{ github.sha }}
+          path: .tlt-release/tlt-release.json
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 0
