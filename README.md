@@ -21,6 +21,20 @@ Open `http://localhost:8080`. Or deploy `dist/` to a **studio-owned staging** Wo
 - `.github/workflows/verify.yml` — checks every push/PR and uploads `dist/` as a verified build artifact.
 - `wrangler.jsonc` — named **preview only**; not a client production deployment credential or target.
 
+## Connect studio-owned Cloudflare staging (one-time)
+
+Cloudflare's Git provider authorization is a studio-admin task, never a client task.
+
+1. Sign in to the **studio** Cloudflare account (not the test client's account).
+2. Open **Compute → Workers & Pages → Create application** and import GitHub repository `adamadkins/tlt-client-deployment-test`. Approve the Cloudflare GitHub App for that repository if prompted.
+3. Set the Worker name to **`tlt-client-deployment-test-preview`** to match `wrangler.jsonc`. Use branch **`main`** for the studio preview only, repository root **`/`**.
+4. Build command: **`npm run build`**. Deploy command: **`npx wrangler deploy`**. The `assets.directory` in `wrangler.jsonc` points to the generated `dist/`. There is no production credential in the repository.
+5. Save and Deploy. The output should be a `*.workers.dev` HTTPS address in the **studio** account. Open that URL and confirm the mitten shop loads.
+6. Open `https://YOUR-URL/version.json` and verify `commit` equals the current GitHub `main` SHA. Workers Builds injects `WORKERS_CI_COMMIT_SHA`, which the build uses to stamp the exact commit.
+7. Keep the client production Worker separate; never connect it to this GitHub repository's automatic push-to-deploy integration.
+
+If you need to stage a specific historical commit rather than the latest `main`, adjust the studio build trigger to build that commit. Production uploads must always use a **client-approved pinned commit**, never a moving branch.
+
 ## Intended end-to-end test
 
 1. Build this repository in GitHub Actions and obtain the full 40-character commit SHA and the verified artifact.

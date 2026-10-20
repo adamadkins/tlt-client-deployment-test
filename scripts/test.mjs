@@ -20,6 +20,16 @@ test('Release metadata identifies the exact build source', async () => {
   assert.equal(version.demo, true);
   assert.equal(version.checkout_enabled, false);
   assert.match(version.commit, /^(?:[a-f0-9]{40}|local-development)$/);
+  const expected = process.env.SITE_COMMIT_SHA ||
+    (process.env.WORKERS_CI === '1'
+      ? process.env.WORKERS_CI_COMMIT_SHA
+      : process.env.GITHUB_SHA || process.env.WORKERS_CI_COMMIT_SHA);
+  if (expected) {
+    assert.equal(version.commit, expected);
+    assert.match(await get('index.html'), new RegExp(expected));
+  }
+  if (process.env.WORKERS_CI === '1') assert.notEqual(version.commit, 'local-development');
+
 });
 test('No live checkout, credential collection, or hosted payment integrations', async () => {
   const js = await get('app.js');

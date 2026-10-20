@@ -3,7 +3,13 @@ import { resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const input = resolve(root, 'src');
 const output = resolve(root, 'dist');
-const sha = process.env.GITHUB_SHA || process.env.SITE_COMMIT_SHA || 'local-development';
+// GitHub Actions and Cloudflare Workers Builds expose different commit variables.
+// Always stamp the actual deployed commit; never mark CI output local-development.
+const sha = process.env.SITE_COMMIT_SHA ||
+  (process.env.WORKERS_CI === '1'
+    ? process.env.WORKERS_CI_COMMIT_SHA
+    : process.env.GITHUB_SHA || process.env.WORKERS_CI_COMMIT_SHA) ||
+  'local-development';
 if (!/^(?:[0-9a-f]{40}|local-development)$/.test(sha)) {
   throw new Error('SITE_COMMIT_SHA must be a 40-character lowercase Git SHA');
 }
