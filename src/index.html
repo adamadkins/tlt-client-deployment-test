@@ -13,14 +13,14 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <div class="test-banner" role="status"><span class="test-dot" aria-hidden="true"></span> DEMONSTRATION SITE <span class="test-banner-separator">·</span> No real purchases or payments</div>
+  <div class="test-banner" role="status"><span class="test-dot" aria-hidden="true"></span> TEST SITE <span class="test-banner-separator">·</span> The mittens are a fictional demo. Print-shop items are real and ship from Printful</div>
   <header class="site-header">
     <div class="header-inner shell">
       <a class="wordmark" href="#home" aria-label="Thread and Thistle, home"><img src="./assets/mark.svg" width="38" height="38" alt=""/><span>thread <em>&</em> thistle</span></a>
       <nav class="main-nav" aria-label="Main navigation">
-        <a href="#collection">The collection</a><a href="#story">Our story</a><a href="#faq">Questions</a>
+        <a href="#collection">The collection</a><a href="#print-shop">Print shop</a><a href="#story">Our story</a><a href="#faq">Questions</a>
       </nav>
-      <button type="button" class="cart-trigger" id="open-cart" aria-haspopup="dialog" aria-controls="cart-dialog" aria-label="Open demo cart, 0 items">
+      <button type="button" class="cart-trigger" id="open-cart" aria-haspopup="dialog" aria-controls="cart-dialog" aria-label="Open bag, 0 items">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 8h14l1 12H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
         <span>Bag</span><span class="cart-count" id="cart-count">0</span>
       </button>
@@ -56,8 +56,15 @@
         <p class="collection-note"><span aria-hidden="true">✳</span> A demo collection for testing. Products, prices, and inventory are fictional.</p>
       </div>
     </section>
+    <section class="live-shop section-pad" id="print-shop" aria-labelledby="print-shop-title">
+      <div class="shell">
+        <div class="section-title-row"><div><div class="eyebrow subdued">LIVE FROM OUR PRINT SHOP</div><h2 id="print-shop-title">Made on <em>demand.</em></h2></div><p>These are real products, fetched live from our Printful store. Pay securely with Stripe; Printful makes and ships your order.</p></div>
+        <p class="live-status" id="live-status" role="status">Loading the print shop…</p>
+        <div class="product-grid" id="live-products"></div>
+      </div>
+    </section>
     <section class="story" id="story" aria-labelledby="story-title"><div class="shell story-grid"><div class="story-art"><div class="story-art-inner"><div class="story-art-symbol" aria-hidden="true">✳</div><div class="story-art-circle"><img src="./assets/mitten-oat.svg" alt="Cream cable knit mittens" width="520" height="580" loading="lazy"></div><span class="story-art-caption">slow made / well loved</span></div></div><div class="story-copy"><div class="eyebrow subdued">HELLO FROM OUR LITTLE CORNER</div><h2 id="story-title">A little warmth goes <em>a long way.</em></h2><p>Some things are better when they take a little longer. Like a handwritten note, a cup of tea, and the last few stitches of a pair of mittens.</p><p>Thread & Thistle is a fictional small-shop concept, made to show how personal a beautiful storefront can feel—without making its owner wrestle with hosting or technology.</p><span class="signature">from our hands to yours <span aria-hidden="true">♡</span></span></div></div></section>
-    <section class="faq section-pad" id="faq" aria-labelledby="faq-title"><div class="shell faq-grid"><div><div class="eyebrow subdued">A FEW GOOD THINGS TO KNOW</div><h2 id="faq-title">Curious? <em>Us too.</em></h2><p>Here are a few quick answers about this example storefront.</p></div><div class="faq-list"><details><summary>Can I place an order here?<span aria-hidden="true">+</span></summary><p>No. This is a demonstration site. Its bag works for testing the interface, but checkout and payment collection are intentionally disabled.</p></details><details><summary>Are these mittens available for purchase?<span aria-hidden="true">+</span></summary><p>Not from this example shop. The products, prices, and inventory are fictional.</p></details><details><summary>What's this website testing?<span aria-hidden="true">+</span></summary><p>The Little Things Studios is testing how to build a website under the studio account, get client approval, and publish to a Cloudflare Worker owned by the client.</p></details></div></div></section>
+    <section class="faq section-pad" id="faq" aria-labelledby="faq-title"><div class="shell faq-grid"><div><div class="eyebrow subdued">A FEW GOOD THINGS TO KNOW</div><h2 id="faq-title">Curious? <em>Us too.</em></h2><p>Here are a few quick answers about this example storefront.</p></div><div class="faq-list"><details><summary>Can I place an order here?<span aria-hidden="true">+</span></summary><p>Yes, for items in the print shop. Payment is handled by Stripe and Printful prints and ships the order. The mittens are fictional and can't be ordered.</p></details><details><summary>Are these mittens available for purchase?<span aria-hidden="true">+</span></summary><p>No. The mittens, their prices and inventory are fictional. The print shop above is the real shop.</p></details><details><summary>What's this website testing?<span aria-hidden="true">+</span></summary><p>The Little Things Studios is testing how to build a website under the studio account, get client approval, and publish to a Cloudflare Worker owned by the client.</p></details></div></div></section>
     <div class="outro"><div class="shell outro-inner"><span aria-hidden="true">✳</span><p>Made with care. Made for the little things.</p><a href="#home">Back to top ↑</a></div></div>
   </main>
   <footer class="site-footer"><div class="shell footer-inner"><a class="wordmark footer-wordmark" href="#home"><img src="./assets/mark.svg" width="34" height="34" alt=""/><span>thread <em>&</em> thistle</span></a><div><p>Fictional storefront for a deployment test.</p><p>Built by The Little Things Studios · Build <code id="build-sha">__COMMIT_SHA__</code></p></div></div></footer>
@@ -65,7 +72,7 @@
   <section class="cart-dialog" id="cart-dialog" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true" hidden>
     <div class="cart-head"><div><span class="eyebrow subdued">YOUR COZY PICKS</span><h2 id="cart-title">Your bag <em>♡</em></h2></div><button type="button" class="icon-button" id="close-cart" aria-label="Close bag">×</button></div>
     <div class="cart-list" id="cart-list"></div>
-    <div class="cart-bottom"><div class="cart-total"><span>Subtotal</span><strong id="cart-subtotal">$0.00</strong></div><p class="demo-payment-note">Demo only. No orders or payments will be processed.</p><button type="button" class="button button-dark checkout-disabled" disabled aria-disabled="true">Checkout unavailable in demo</button></div>
+    <div class="cart-bottom"><div class="cart-total"><span>Subtotal</span><strong id="cart-subtotal">$0.00</strong></div><p class="demo-payment-note" id="checkout-note">Print-shop items check out securely with Stripe. The fictional mittens can't be ordered.</p><button type="button" class="button button-dark checkout-button" id="checkout" disabled aria-disabled="true">Checkout</button></div>
   </section>
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>

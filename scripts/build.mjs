@@ -28,6 +28,7 @@ await writeFile(resolve(output, 'version.json'), JSON.stringify({
   site: 'thread-and-thistle-demo',
   commit: sha,
   demo: true,
-  checkout_enabled: false
+  checkout_enabled: true,
+  shop: 'portal.tlt-studios.com'
 }, null, 2) + '\n');
 console.log(`Built demo site at dist/ for ${sha.slice(0, 12)}`);

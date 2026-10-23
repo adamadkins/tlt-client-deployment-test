@@ -10,8 +10,9 @@ test('Build includes accessible HTML and local assets', async () => {
   const html = await get('index.html');
   assert.match(html, /<main id="main">/);
   assert.match(html, /aria-labelledby="collection-title"/);
-  assert.match(html, /Demo only. No orders or payments/);
-  assert.match(html, /checkout-disabled" disabled/);
+  assert.match(html, /id="live-products"/);
+  assert.match(html, /id="checkout" disabled/);
+  assert.match(html, /fictional demo/);
   assert.doesNotMatch(html, /__COMMIT_SHA__/);
   assert.match(html, /rel="stylesheet" href=".\/styles.css"/);
   for (const file of ['app.js', 'styles.css', 'assets/mitten-rose.svg', 'assets/mitten-oat.svg', 'assets/mitten-pine.svg','assets/mark.svg']) await access(resolve(root, file));
@@ -20,7 +21,8 @@ test('Release metadata identifies the exact build source', async () => {
   const version = JSON.parse(await get('version.json'));
   assert.equal(version.site, 'thread-and-thistle-demo');
   assert.equal(version.demo, true);
-  assert.equal(version.checkout_enabled, false);
+  assert.equal(version.checkout_enabled, true);
+  assert.equal(version.shop, 'portal.tlt-studios.com');
   assert.match(version.commit, /^(?:[a-f0-9]{40}|local-development)$/);
   let gitHead = null;
   try {
@@ -34,11 +36,15 @@ test('Release metadata identifies the exact build source', async () => {
   assert.match(await get('index.html'),new RegExp(expected));
 
 });
-test('No live checkout, credential collection, or hosted payment integrations', async () => {
+test('The page only talks to the studio portal, and never collects card details', async () => {
   const js = await get('app.js');
   const html = await get('index.html');
-  assert.doesNotMatch(js, /fetch\s*\(|XMLHttpRequest|localStorage|sessionStorage|document\.cookie/);
-  assert.doesNotMatch(html, /stripe\.com|paypal\.com|checkout\.stripe\.com|<form[^>]*action=/i);
+  assert.doesNotMatch(js, /XMLHttpRequest|localStorage|sessionStorage|document\.cookie/);
+  const hosts = [...js.matchAll(/https?:\/\/[a-z0-9.-]+/gi)].map(m => m[0].toLowerCase());
+  assert.deepEqual([...new Set(hosts)], ['https://portal.tlt-studios.com']);
+  assert.match(js, /target\.hostname !== 'checkout\.stripe\.com'/);
+  assert.doesNotMatch(html, /paypal\.com|<form[^>]*action=|autocomplete="cc-|card-number/i);
+  assert.doesNotMatch(html, /<script[^>]+src="https?:/i);
 });
 
 test('Build commit is the checked-out Git SHA even when Cloudflare variables are malformed', () => {
