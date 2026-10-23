@@ -191,9 +191,11 @@
     return card;
   }
 
-  async function loadPrintShop() {
+  async function loadPrintShop(attempt = 1) {
+    liveStatus.hidden = false;
+    liveStatus.textContent = attempt > 1 ? 'Still loading the print shop…' : 'Loading the print shop…';
     try {
-      const response = await fetch(`${PORTAL}/api/site/printful/products`, { headers: { Accept: 'application/json' } });
+      const response = await fetch(`${PORTAL}/api/site/printful/products`, { headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(20000) });
       const data = await response.json().catch(() => null);
       if (!response.ok || !Array.isArray(data?.products)) throw new Error('unavailable');
       const products = data.products.filter(p => p.variants?.length);
@@ -201,7 +203,12 @@
       liveStatus.textContent = products.length ? '' : 'Nothing in the print shop yet. Check back soon.';
       liveStatus.hidden = products.length > 0;
     } catch {
-      liveStatus.textContent = 'The print shop is taking a moment. Please try again shortly.';
+      if (attempt < 3) return loadPrintShop(attempt + 1);
+      liveStatus.textContent = 'The print shop is taking a moment. ';
+      const retry = makeNode('button', 'Try again', 'text-link');
+      retry.type = 'button';
+      retry.addEventListener('click', () => loadPrintShop());
+      liveStatus.append(retry);
     }
   }
 
