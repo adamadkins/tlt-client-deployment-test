@@ -123,6 +123,7 @@
     const img = makeNode('img');
     img.alt = product.name;
     img.width = 520; img.height = 580; img.loading = 'lazy';
+    const thumbs = makeNode('div', null, 'thumbs');
     media.append(img);
     const meta = makeNode('div', null, 'product-meta');
     const heading = makeNode('div');
@@ -139,6 +140,7 @@
     add.type = 'button';
     for (const select of [colorSelect, sizeSelect]) { const label = makeNode('label'); label.append(select); actions.append(label); }
     actions.append(add);
+    const showPicture = url => { if (url) img.src = url; };
     const chosen = () => product.variants.find(v => (v.color || 'Standard') === colorSelect.value && (v.size || 'One size') === sizeSelect.value);
     function refresh(changedColor) {
       const options = product.variants.filter(v => (v.color || 'Standard') === colorSelect.value);
@@ -151,8 +153,22 @@
         }
         const firstOpen = options.find(v => v.available);
         if (firstOpen) sizeSelect.value = firstOpen.size || 'One size';
-        const picture = options.find(v => v.image)?.image || product.thumbnail;
-        if (picture) img.src = picture;
+        const pictures = [...new Set(options.flatMap(v => (Array.isArray(v.images) && v.images.length ? v.images : [v.image])).filter(Boolean))];
+        if (!pictures.length && product.thumbnail) pictures.push(product.thumbnail);
+        showPicture(pictures[0]);
+        thumbs.replaceChildren();
+        if (pictures.length > 1) {
+          pictures.forEach((url, index) => {
+            const thumb = makeNode('button', null, 'thumb');
+            thumb.type = 'button';
+            thumb.setAttribute('aria-label', `Show picture ${index + 1} of ${pictures.length}`);
+            const small = makeNode('img');
+            small.src = url; small.alt = ''; small.loading = 'lazy'; small.width = 56; small.height = 56;
+            thumb.append(small);
+            thumb.addEventListener('click', () => showPicture(url));
+            thumbs.append(thumb);
+          });
+        }
       }
       const v = chosen();
       price.textContent = v ? currency.format(v.price_cents / 100) : '';
@@ -170,7 +186,7 @@
       drawCart();
       notify(`${product.name} added to your bag`);
     });
-    card.append(media, meta, actions);
+    card.append(media, thumbs, meta, actions);
     refresh(true);
     return card;
   }
